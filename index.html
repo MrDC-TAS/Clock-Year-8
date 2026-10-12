@@ -1,0 +1,554 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Laser Clock in Illustrator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: workshop job-sheet — numbered build steps, each pairing instructions with a drawn tool + the artboard at that stage */
+:root{
+  --bg:#f3f4f1; --paper:#ffffff; --ink:#1d1f1c; --muted:#5d625a; --line:#d9dcd4;
+  --ply:#c9a26b; --ply-soft:#efe3cf; --cut:#e10000; --engrave:#111111;
+  --ui:#323232; --ui-2:#454545; --ui-3:#5a5a5a; --ui-text:#e6e6e6; --ui-blue:#2d8ceb;
+  --display:"Archivo",system-ui,sans-serif; --body:"Archivo",system-ui,sans-serif; --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#171816; --paper:#20221f; --ink:#ecede8; --muted:#a3a89e; --line:#363933;
+  --ply:#d6b27c; --ply-soft:#3a3226; --cut:#ff3b3b; --engrave:#ecede8; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#171816; --paper:#20221f; --ink:#ecede8; --muted:#a3a89e; --line:#363933;
+  --ply:#d6b27c; --ply-soft:#3a3226; --cut:#ff3b3b; --engrave:#ecede8; color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;padding-inline:16px;padding-block:28px 64px}
+.wrap{max-width:1040px;margin:0 auto;display:grid;gap:28px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.1}
+h1{font-size:clamp(2rem,5vw,3.2rem);font-weight:800;font-stretch:80%;letter-spacing:-.01em}
+h2{font-size:1.55rem;font-weight:750;font-stretch:85%}
+h3{font-size:1.05rem;font-weight:700}
+p{margin:0}
+.eyebrow{font-family:var(--mono);font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+kbd{font-family:var(--mono);font-size:.82em;border:1px solid var(--line);border-bottom-width:2px;border-radius:4px;padding:0 .35em;background:var(--paper);white-space:nowrap}
+code,.v{font-family:var(--mono);font-size:.9em}
+.cut{color:var(--cut);font-weight:700}
+.eng{font-weight:700}
+
+header{display:grid;grid-template-columns:1.1fr .9fr;gap:28px;align-items:center}
+header .lede{color:var(--muted);max-width:56ch;margin-top:12px}
+.hero-fig{background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:12px}
+.hero-fig figcaption{font-size:.8rem;color:var(--muted);margin-top:6px}
+
+.rules{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.rule{background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:18px;display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start}
+.rule .sw{width:46px;height:46px;border-radius:4px;display:grid;place-items:center}
+.rule.r .sw{border:2px solid var(--cut)}
+.rule.r .sw i{display:block;width:30px;height:1px;background:var(--cut)}
+.rule.b .sw{background:var(--engrave)}
+.rule dl{display:grid;grid-template-columns:auto 1fr;gap:2px 12px;margin:8px 0 0;font-size:.9rem}
+.rule dt{color:var(--muted)}
+.rule dd{margin:0;font-family:var(--mono);font-size:.85rem}
+
+.step{background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:22px;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:24px}
+.step-head{grid-column:1/-1;display:flex;gap:14px;align-items:baseline;border-bottom:1px solid var(--line);padding-bottom:12px}
+.num{font-family:var(--display);font-weight:800;font-stretch:75%;font-size:2.2rem;line-height:1;color:var(--ply)}
+.step ol,.step ul{margin:0;padding-left:1.2em;display:grid;gap:8px}
+.body{display:grid;gap:14px;min-width:0;align-content:start}
+.side{display:grid;gap:14px;align-content:start;min-width:0}
+.tip{background:var(--ply-soft);border-radius:4px;padding:10px 12px;font-size:.92rem}
+.warn{border-left:3px solid var(--cut);padding:4px 0 4px 12px;font-size:.92rem}
+
+/* Illustrator-style UI replicas */
+.tools{display:flex;flex-wrap:wrap;gap:10px}
+.tool{display:flex;align-items:center;gap:10px;background:var(--ui);color:var(--ui-text);border-radius:5px;padding:6px 12px 6px 6px;font-size:.85rem}
+.tool svg{width:34px;height:34px;background:var(--ui-2);border-radius:3px;padding:5px;flex:none}
+.tool b{display:block;font-weight:600}
+.tool span{font-family:var(--mono);font-size:.72rem;opacity:.75}
+.panel{background:var(--ui);color:var(--ui-text);border-radius:5px;font-size:.8rem;overflow:hidden;font-family:system-ui,sans-serif}
+.panel .tab{background:#262626;padding:5px 10px;font-weight:600;font-size:.75rem;letter-spacing:.02em}
+.panel .pb{padding:10px;display:grid;gap:8px}
+.row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.field{background:#1e1e1e;border:1px solid #6a6a6a;border-radius:2px;padding:2px 6px;font-family:var(--mono);min-width:70px}
+.field.hl{outline:2px solid var(--ui-blue);outline-offset:1px}
+.btn{background:var(--ui-3);border-radius:3px;padding:3px 10px}
+.btn.hl{outline:2px solid var(--ui-blue)}
+.slider{flex:1;min-width:80px;height:6px;border-radius:3px}
+.chk{display:inline-block;width:12px;height:12px;border:1px solid #9a9a9a;border-radius:2px;background:var(--ui-blue);position:relative}
+.ico-row{display:flex;gap:6px;flex-wrap:wrap}
+.ico-row svg{width:30px;height:30px;background:var(--ui-2);border-radius:3px;padding:4px}
+.ico-row .hl{outline:2px solid var(--ui-blue)}
+.menu{display:grid;gap:0}
+.menu div{padding:3px 10px;display:flex;justify-content:space-between;gap:16px}
+.menu .sel{background:var(--ui-blue);color:#fff}
+.menu .dim{opacity:.55}
+.layer{display:flex;align-items:center;gap:8px;padding:5px 8px;border-bottom:1px solid #262626}
+.layer i{width:4px;height:16px;display:block}
+
+.art{background:#fff;border:1px solid var(--line);border-radius:4px;width:100%;height:auto;display:block}
+.art-cap{font-size:.78rem;color:var(--muted);margin-top:4px}
+
+.check{background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:22px;display:grid;gap:14px}
+.check ul{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:1fr 1fr;gap:10px 24px}
+.check li{display:grid;grid-template-columns:20px 1fr;gap:10px;align-items:start}
+.check li::before{content:"";width:16px;height:16px;border:2px solid var(--ink);border-radius:3px;margin-top:3px}
+.keys{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.9rem;min-width:340px}
+th,td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--line)}
+th{font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+footer{font-size:.8rem;color:var(--muted)}
+
+@media (max-width:760px){
+  header,.rules,.step{grid-template-columns:1fr}
+  .check ul{grid-template-columns:1fr}
+}
+</style>
+
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-select" viewBox="0 0 24 24"><path d="M6 3l12 10-5.5.8 3 6-2.2 1-3-6L6 19z" fill="#e6e6e6"/></symbol>
+    <symbol id="i-direct" viewBox="0 0 24 24"><path d="M6 3l12 10-5.5.8 3 6-2.2 1-3-6L6 19z" fill="#323232" stroke="#e6e6e6" stroke-width="1.4" stroke-linejoin="round"/></symbol>
+    <symbol id="i-ellipse" viewBox="0 0 24 24"><ellipse cx="12" cy="12" rx="8" ry="8" fill="none" stroke="#e6e6e6" stroke-width="1.8"/></symbol>
+    <symbol id="i-rect" viewBox="0 0 24 24"><rect x="4.5" y="5.5" width="15" height="13" fill="none" stroke="#e6e6e6" stroke-width="1.8"/></symbol>
+    <symbol id="i-type" viewBox="0 0 24 24"><path d="M5 5h14v3.5h-1.6L16.8 7H13v11h2v1.6H9V18h2V7H7.2l-.6 1.5H5z" fill="#e6e6e6"/></symbol>
+    <symbol id="i-rotate" viewBox="0 0 24 24"><path d="M18 12a6 6 0 1 1-2.2-4.6" fill="none" stroke="#e6e6e6" stroke-width="1.8"/><path d="M17.5 3.5v5h-5" fill="none" stroke="#e6e6e6" stroke-width="1.8"/><circle cx="12" cy="12" r="1.6" fill="#e6e6e6"/></symbol>
+    <symbol id="i-builder" viewBox="0 0 24 24"><circle cx="9" cy="10" r="5" fill="none" stroke="#e6e6e6" stroke-width="1.6"/><circle cx="14" cy="10" r="5" fill="none" stroke="#e6e6e6" stroke-width="1.6"/><path d="M15 15v7M11.5 18.5h7" stroke="#e6e6e6" stroke-width="1.8"/></symbol>
+    <symbol id="i-unite" viewBox="0 0 24 24"><path d="M3 3h11v7h7v11H10v-7H3z" fill="#e6e6e6"/></symbol>
+    <symbol id="i-minus" viewBox="0 0 24 24"><path d="M3 3h11v7h-4v4H3z" fill="#e6e6e6"/><rect x="10" y="10" width="11" height="11" fill="none" stroke="#9a9a9a" stroke-width="1" stroke-dasharray="2 1.5"/></symbol>
+    <symbol id="i-intersect" viewBox="0 0 24 24"><rect x="3" y="3" width="11" height="11" fill="none" stroke="#9a9a9a" stroke-dasharray="2 1.5"/><rect x="10" y="10" width="11" height="11" fill="none" stroke="#9a9a9a" stroke-dasharray="2 1.5"/><rect x="10" y="10" width="4" height="4" fill="#e6e6e6"/></symbol>
+    <symbol id="i-exclude" viewBox="0 0 24 24"><path d="M3 3h11v7h-4v4H3zM14 10h7v11H10v-7h4z" fill="#e6e6e6"/></symbol>
+    <symbol id="i-alh" viewBox="0 0 24 24"><path d="M12 2v20" stroke="#e6e6e6" stroke-width="1.6"/><rect x="6" y="5" width="12" height="5" fill="#e6e6e6"/><rect x="8" y="14" width="8" height="5" fill="#e6e6e6"/></symbol>
+    <symbol id="i-alv" viewBox="0 0 24 24"><path d="M2 12h20" stroke="#e6e6e6" stroke-width="1.6"/><rect x="5" y="6" width="5" height="12" fill="#e6e6e6"/><rect x="14" y="8" width="5" height="8" fill="#e6e6e6"/></symbol>
+    <symbol id="i-all" viewBox="0 0 24 24"><path d="M3 2v20" stroke="#e6e6e6" stroke-width="1.6"/><rect x="5" y="5" width="13" height="5" fill="#e6e6e6"/><rect x="5" y="14" width="8" height="5" fill="#e6e6e6"/></symbol>
+    <symbol id="i-alt" viewBox="0 0 24 24"><path d="M2 3h20" stroke="#e6e6e6" stroke-width="1.6"/><rect x="5" y="5" width="5" height="13" fill="#e6e6e6"/><rect x="14" y="5" width="5" height="8" fill="#e6e6e6"/></symbol>
+    <symbol id="i-artboard" viewBox="0 0 24 24"><rect x="5" y="5" width="14" height="14" fill="none" stroke="#e6e6e6" stroke-width="1.6"/><path d="M5 2v3M2 5h3M19 22v-3M22 19h-3" stroke="#e6e6e6" stroke-width="1.6"/></symbol>
+  </defs>
+</svg>
+
+<div class="wrap">
+
+<header>
+  <div>
+    <p class="eyebrow">Year 8 Technology · Designer Clocks · CAD step-by-step</p>
+    <h1>Drawing a laser-cut clock in Adobe Illustrator</h1>
+    <p class="lede">This worked example builds a simple standing clock: a round face, a centre hole for the clock movement, engraved hour markers, a base and a slot-together stand. Use the same steps, then change the shapes to show your design era.</p>
+  </div>
+  <figure class="hero-fig" style="margin:0">
+    <div id="hero"></div>
+    <figcaption>The finished file: one 300 × 300 mm board per material. <span class="cut">Red</span> lines cut. <span class="eng">Black</span> shapes engrave.</figcaption>
+  </figure>
+</header>
+
+<section class="rules" aria-label="Laser colour rules">
+  <div class="rule r">
+    <div class="sw"><i></i></div>
+    <div>
+      <h3><span class="cut">RED</span> = CUT through the material</h3>
+      <dl>
+        <dt>Stroke</dt><dd>CMYK 0, 100, 100, 0</dd>
+        <dt>Weight</dt><dd>0.1 pt</dd>
+        <dt>Fill</dt><dd>None</dd>
+      </dl>
+    </div>
+  </div>
+  <div class="rule b">
+    <div class="sw"></div>
+    <div>
+      <h3><span class="eng">BLACK</span> = ENGRAVE the surface</h3>
+      <dl>
+        <dt>Colour</dt><dd>CMYK 0, 0, 0, 100</dd>
+        <dt>Weight</dt><dd>Any size</dd>
+        <dt>Fill</dt><dd>Black fill or black stroke</dd>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<!-- STEP 1 -->
+<section class="step">
+  <div class="step-head"><span class="num">1</span><h2>Set up the document</h2></div>
+  <div class="body">
+    <ol>
+      <li>Open Illustrator and choose <b>File › New</b>.</li>
+      <li>Click the <b>Print</b> tab. Change <b>Units</b> to <b>Millimeters</b>.</li>
+      <li>Set Width <span class="v">300 mm</span> and Height <span class="v">300 mm</span>. This is the size of your material sheet, so everything must fit inside it.</li>
+      <li>Click <b>Create</b>. Save straight away as <code>Surname_Clock.ai</code>.</li>
+    </ol>
+    <p class="tip">Save often with <kbd>⌘ Cmd</kbd> + <kbd>S</kbd>. Made a mistake? Undo with <kbd>⌘ Cmd</kbd> + <kbd>Z</kbd>.</p>
+  </div>
+  <div class="side">
+    <div class="panel">
+      <div class="tab">New Document · Print</div>
+      <div class="pb">
+        <div class="row">Width <span class="field hl">300 mm</span></div>
+        <div class="row">Height <span class="field hl">300 mm</span></div>
+        <div class="row">Units <span class="field hl">Millimeters ▾</span></div>
+        <div class="row">Color Mode <span class="field">CMYK Color ▾</span></div>
+        <div class="row" style="justify-content:flex-end"><span class="btn">Close</span><span class="btn" style="background:var(--ui-blue)">Create</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STEP 2 -->
+<section class="step">
+  <div class="step-head"><span class="num">2</span><h2>Draw the clock face</h2></div>
+  <div class="body">
+    <div class="tools">
+      <div class="tool"><svg><use href="#i-ellipse"/></svg><div><b>Ellipse Tool</b><span>Shortcut L · hides under Rectangle</span></div></div>
+    </div>
+    <ol>
+      <li>Press <kbd>L</kbd> for the <b>Ellipse Tool</b>. Or click and hold the Rectangle Tool in the toolbar to find it.</li>
+      <li><b>Click once</b> on the artboard (don't drag). A box opens.</li>
+      <li>Type Width <span class="v">200 mm</span> and Height <span class="v">200 mm</span>, then click OK.</li>
+      <li>Set the colours: <b>Fill = None</b> and <b>Stroke = red</b> (C0 M100 Y100 K0). Press <kbd>X</kbd> to switch between the fill and stroke boxes, and <kbd>/</kbd> to set the front box to None.</li>
+      <li>Open <b>Window › Stroke</b> and type <span class="v">0.1 pt</span> in Weight. Type the "pt" so Illustrator doesn't use mm.</li>
+    </ol>
+    <p class="warn">A 0.1 pt line is very thin on screen. That's correct. Zoom in if you need to see it.</p>
+  </div>
+  <div class="side">
+    <div class="panel">
+      <div class="tab">Ellipse</div>
+      <div class="pb">
+        <div class="row">Width <span class="field hl">200 mm</span></div>
+        <div class="row">Height <span class="field hl">200 mm</span></div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="tab">Color · Window › Color</div>
+      <div class="pb">
+        <div class="row">
+          <svg width="44" height="40" viewBox="0 0 44 40" aria-label="Fill none, stroke red">
+            <rect x="2" y="2" width="24" height="24" fill="#fff" stroke="#9a9a9a"/><path d="M3 25L25 3" stroke="#e10000" stroke-width="2"/>
+            <rect x="16" y="13" width="24" height="24" fill="none" stroke="#ff0000" stroke-width="6"/>
+          </svg>
+          <span style="font-size:.75rem;opacity:.8">Fill: none (front-left)<br>Stroke: red (back-right)</span>
+        </div>
+        <div class="row">C <span class="slider" style="background:linear-gradient(90deg,#fff,#00aeef)"></span><span class="field hl" style="min-width:44px">0 %</span></div>
+        <div class="row">M <span class="slider" style="background:linear-gradient(90deg,#fff,#ec008c)"></span><span class="field hl" style="min-width:44px">100 %</span></div>
+        <div class="row">Y <span class="slider" style="background:linear-gradient(90deg,#fff,#fff200)"></span><span class="field hl" style="min-width:44px">100 %</span></div>
+        <div class="row">K <span class="slider" style="background:linear-gradient(90deg,#fff,#000)"></span><span class="field hl" style="min-width:44px">0 %</span></div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="tab">Stroke</div>
+      <div class="pb"><div class="row">Weight <span class="field hl">0.1 pt</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- STEP 3 -->
+<section class="step">
+  <div class="step-head"><span class="num">3</span><h2>Cut the centre hole and line it up</h2></div>
+  <div class="body">
+    <div class="tools">
+      <div class="tool"><svg><use href="#i-ellipse"/></svg><div><b>Ellipse Tool</b><span>L</span></div></div>
+      <div class="tool"><svg><use href="#i-select"/></svg><div><b>Selection Tool</b><span>V</span></div></div>
+    </div>
+    <ol>
+      <li>Click once with the Ellipse Tool and make a circle <span class="v">8 × 8 mm</span>. Measure your clock movement's shaft to check; most are 8 mm.</li>
+      <li>Give it the same <span class="cut">red 0.1 pt</span> stroke and no fill. It is a cut.</li>
+      <li>Press <kbd>V</kbd> for the <b>Selection Tool</b> and drag a box over both circles. (Or click one, then hold <kbd>⇧ Shift</kbd> and click the other.)</li>
+      <li>Click the big circle once more so it gets a thick outline. This makes it the <b>key object</b> that stays still.</li>
+      <li>In <b>Window › Align</b>, click <b>Horizontal Align Center</b> and <b>Vertical Align Center</b>.</li>
+    </ol>
+  </div>
+  <div class="side">
+    <div class="panel">
+      <div class="tab">Align</div>
+      <div class="pb">
+        <div class="ico-row">
+          <svg><use href="#i-all"/></svg><svg class="hl"><use href="#i-alh"/></svg>
+          <svg><use href="#i-alt"/></svg><svg class="hl"><use href="#i-alv"/></svg>
+        </div>
+        <div style="font-size:.72rem;opacity:.8">Horizontal Align Center · Vertical Align Center</div>
+      </div>
+    </div>
+    <div><div id="s3"></div><p class="art-cap">Face and 8 mm hole, both red cuts.</p></div>
+  </div>
+</section>
+
+<!-- STEP 4 -->
+<section class="step">
+  <div class="step-head"><span class="num">4</span><h2>Add the hour markers</h2></div>
+  <div class="body">
+    <div class="tools">
+      <div class="tool"><svg><use href="#i-rect"/></svg><div><b>Rectangle Tool</b><span>M</span></div></div>
+      <div class="tool"><svg><use href="#i-rotate"/></svg><div><b>Rotate Tool</b><span>R</span></div></div>
+    </div>
+    <ol>
+      <li>Click once with the <b>Rectangle Tool</b> and make a bar <span class="v">3 × 12 mm</span>.</li>
+      <li>Give it a <b>black fill</b> (C0 M0 Y0 K100) and no stroke. This one engraves.</li>
+      <li>Move it to the 12 o'clock spot, about 10 mm in from the edge. Line it up with the face using <b>Horizontal Align Center</b> (as in Step 3).</li>
+      <li>Keep the bar selected. Choose the <b>Rotate Tool</b>, then hold <kbd>⌥ Option</kbd> and click the exact centre of the hole. Smart Guides will say <i>center</i>.</li>
+      <li>Type Angle <span class="v">30°</span> and click <b>Copy</b> (not OK). You now have the 1 o'clock marker.</li>
+      <li>Press <kbd>⌘ Cmd</kbd> + <kbd>D</kbd> ten times to repeat. All 12 markers appear.</li>
+    </ol>
+    <p class="tip">Why 30°? A circle is 360°, and 360 ÷ 12 hours = 30°. For 60 minute ticks, use 6°.</p>
+  </div>
+  <div class="side">
+    <div class="panel">
+      <div class="tab">Rotate</div>
+      <div class="pb">
+        <div class="row">Angle <span class="field hl">30°</span></div>
+        <div class="row"><span class="chk"></span> Preview</div>
+        <div class="row" style="justify-content:flex-end"><span class="btn hl">Copy</span><span class="btn">Cancel</span><span class="btn">OK</span></div>
+      </div>
+    </div>
+    <div><div id="s4"></div><p class="art-cap">Black markers engrave. The hole and outline stay red.</p></div>
+  </div>
+</section>
+
+<!-- STEP 5 -->
+<section class="step">
+  <div class="step-head"><span class="num">5</span><h2>Using numbers or letters instead</h2></div>
+  <div class="body">
+    <div class="tools">
+      <div class="tool"><svg><use href="#i-type"/></svg><div><b>Type Tool</b><span>T</span></div></div>
+    </div>
+    <ol>
+      <li>Click with the <b>Type Tool</b> and type one number. Pick a font that suits your design era.</li>
+      <li>Make it <b>black</b>. Place each number by eye, or drag a marker from Step 4 to use as a guide, then delete it.</li>
+      <li>When the numbers are finished, select them all and choose <b>Type › Create Outlines</b> (<kbd>⇧ Shift</kbd> + <kbd>⌘ Cmd</kbd> + <kbd>O</kbd>). This turns the text into shapes.</li>
+    </ol>
+    <p class="warn">Always create outlines. If the laser computer doesn't have your font, the numbers will change or disappear.</p>
+  </div>
+  <div class="side">
+    <div class="panel">
+      <div class="tab">Type menu</div>
+      <div class="pb menu" style="padding:6px 0">
+        <div class="dim"><span>Font</span><span>›</span></div>
+        <div class="dim"><span>Size</span><span>›</span></div>
+        <div class="sel"><span>Create Outlines</span><span>⇧⌘O</span></div>
+        <div class="dim"><span>Find Font…</span><span></span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STEP 6 -->
+<section class="step">
+  <div class="step-head"><span class="num">6</span><h2>Add a base with Pathfinder</h2></div>
+  <div class="body">
+    <div class="tools">
+      <div class="tool"><svg><use href="#i-rect"/></svg><div><b>Rectangle Tool</b><span>M</span></div></div>
+      <div class="tool"><svg><use href="#i-unite"/></svg><div><b>Pathfinder: Unite</b><span>Window › Pathfinder</span></div></div>
+      <div class="tool"><svg><use href="#i-builder"/></svg><div><b>Shape Builder</b><span>⇧M · optional</span></div></div>
+    </div>
+    <ol>
+      <li>Draw a rectangle <span class="v">120 × 50 mm</span> and slide it so it overlaps the bottom of the face.</li>
+      <li>Select the <b>face circle and the rectangle only</b>. Click one, hold <kbd>⇧ Shift</kbd>, click the other. Leave the hole and markers out.</li>
+      <li>In <b>Pathfinder</b>, click <b>Unite</b>. The two shapes join into one outline.</li>
+      <li>Check the new outline is still <span class="cut">red, 0.1 pt, no fill</span>. Pathfinder sometimes copies the wrong colours.</li>
+    </ol>
+    <p class="tip">This is where your design era comes in. Unite or Minus Front any shapes you like: Art Deco steps, a pagoda roof, a sunburst. The rule stays the same. The outer edge must be one red line.</p>
+  </div>
+  <div class="side">
+    <div class="panel">
+      <div class="tab">Pathfinder</div>
+      <div class="pb">
+        <div style="font-size:.72rem;opacity:.8">Shape Modes</div>
+        <div class="ico-row">
+          <svg class="hl"><use href="#i-unite"/></svg><svg><use href="#i-minus"/></svg><svg><use href="#i-intersect"/></svg><svg><use href="#i-exclude"/></svg>
+        </div>
+        <div style="font-size:.72rem;opacity:.8">Unite · Minus Front · Intersect · Exclude</div>
+      </div>
+    </div>
+    <div><div id="s6"></div><p class="art-cap">Before: two overlapping shapes. After: one outline.</p></div>
+  </div>
+</section>
+
+<!-- STEP 7 -->
+<section class="step">
+  <div class="step-head"><span class="num">7</span><h2>Make the stand with matching slots</h2></div>
+  <div class="body">
+    <p>The face and stand slide together in a cross. Each piece has a slot as wide as the material is thick, cut halfway into the joint.</p>
+    <ol>
+      <li>Measure your material with callipers. This example uses <span class="v">3 mm</span> acrylic.</li>
+      <li><b>Slot in the face:</b> draw a rectangle <span class="v">3 × 25 mm</span>. Line it up with the centre of the base, touching the bottom edge. Select it and the outline, then click Pathfinder <b>Minus Front</b>.</li>
+      <li><b>The stand:</b> draw a rectangle <span class="v">120 × 50 mm</span>. Cut a <span class="v">3 × 25 mm</span> slot down from the <b>top</b> centre with Minus Front.</li>
+      <li>Both pieces should be <span class="cut">red 0.1 pt</span> with no fill.</li>
+    </ol>
+    <p class="tip">Two 25 mm slots add up to the full 50 mm height, so the pieces sit flush. Test cut the slot in scrap first; if it's loose, make it 2.8 mm.</p>
+  </div>
+  <div class="side">
+    <div class="panel">
+      <div class="tab">Pathfinder</div>
+      <div class="pb">
+        <div class="ico-row"><svg><use href="#i-unite"/></svg><svg class="hl"><use href="#i-minus"/></svg><svg><use href="#i-intersect"/></svg><svg><use href="#i-exclude"/></svg></div>
+        <div style="font-size:.72rem;opacity:.8">Minus Front takes the top shape away</div>
+      </div>
+    </div>
+    <div><div id="s7"></div><p class="art-cap">Slot up from the bottom on the face, down from the top on the stand.</p></div>
+  </div>
+</section>
+
+<!-- STEP 8 -->
+<section class="step">
+  <div class="step-head"><span class="num">8</span><h2>Separate your parts by material and save</h2></div>
+  <div class="body">
+    <p>The laser cuts one sheet of material at a time, so every material needs its own 300 × 300 mm board. You can use the <b>wood</b> plus <b>up to 3 acrylic colours</b>.</p>
+    <ol>
+      <li>Open <b>Window › Artboards</b> and click the <b>+</b> button to add a new artboard. It copies the 300 × 300 mm size. Add one for each material you use.</li>
+      <li>Move each part onto the board for its material. Cut with <kbd>⌘ Cmd</kbd> + <kbd>X</kbd>, click the new board, then paste in the same spot with <kbd>⇧ Shift</kbd> + <kbd>⌘ Cmd</kbd> + <kbd>V</kbd>.</li>
+      <li>Put the title at the top left of each board with the <b>Type Tool</b>, written exactly like this:
+        <ul style="margin-top:6px">
+          <li><code>Wood DESIGN (Your NAME)</code></li>
+          <li><code>White Acrylic (Your NAME)</code></li>
+          <li><code>Yellow Acrylic (Your NAME)</code></li>
+          <li><code>Blue Acrylic (Your NAME)</code></li>
+        </ul>
+        Use the real colour of your acrylic and your own name. Keep the title clear of your parts.</li>
+      <li><b>Wood DESIGN</b> has the clock face: <span class="cut">red</span> cut outline and hole, <b>black</b> engraving.</li>
+      <li><b>Acrylic boards</b> are cut only, so every line on them is <span class="cut">red 0.1 pt</span>.</li>
+      <li>Delete any empty boards, save with <kbd>⌘ Cmd</kbd> + <kbd>S</kbd> and take a screenshot of each board for your folio.</li>
+    </ol>
+    <p class="warn">Maximum 3 acrylic colours. Parts in the same colour go on the same board.</p>
+  </div>
+  <div class="side">
+    <div class="tools"><div class="tool"><svg><use href="#i-artboard"/></svg><div><b>Artboard Tool</b><span>⇧O</span></div></div></div>
+    <div class="panel">
+      <div class="tab">Artboards · Window › Artboards</div>
+      <div class="pb" style="padding:0;gap:0">
+        <div class="layer"><i style="background:var(--ply)"></i>1 · Wood DESIGN</div>
+        <div class="layer"><i style="background:#ffffff"></i>2 · White Acrylic</div>
+        <div class="layer"><i style="background:#f2c500"></i>3 · Yellow Acrylic</div>
+        <div class="layer"><i style="background:#2f6fd6"></i>4 · Blue Acrylic</div>
+        <div class="row" style="justify-content:flex-end;padding:6px 8px"><span class="btn hl">+</span></div>
+      </div>
+    </div>
+    <div><div id="s8"></div><p class="art-cap">The example clock split into 4 boards: wood plus 3 acrylic colours. Here the blue hour markers are cut out to glue on top of the engraved ones.</p></div>
+  </div>
+</section>
+
+<section class="check" aria-label="Final checklist">
+  <h2>Before you send it to the laser</h2>
+  <ul>
+    <li><span>Every cut line is <span class="cut">CMYK 0, 100, 100, 0</span> at <b>0.1 pt</b> with <b>no fill</b>.</span></li>
+    <li><span>Every engraving is <b>CMYK 0, 0, 0, 100</b>.</span></li>
+    <li><span>All text is outlined (Type › Create Outlines). No live text left.</span></li>
+    <li><span>No doubled lines. Two lines on top of each other cut twice and burn the edge.</span></li>
+    <li><span>The centre hole matches your clock movement (about 8 mm).</span></li>
+    <li><span>Slots are the same width as your material.</span></li>
+    <li><span>Engravings sit at least 5 mm in from any cut edge.</span></li>
+    <li><span>Everything fits on the sheet and inside the artboard.</span></li>
+    <li><span>Each material is on its own 300 × 300 mm board, titled "Material (Your NAME)".</span></li>
+    <li><span>No more than 3 acrylic colours, plus the wood.</span></li>
+    <li><span>File saved as <code>.ai</code> with your name, plus screenshots for your folio.</span></li>
+  </ul>
+</section>
+
+<section class="check" aria-label="Shortcuts">
+  <h2>Mac shortcuts used</h2>
+  <p style="color:var(--muted)">On a Mac keyboard: <b>⌘ Command</b> sits either side of the space bar, <b>⌥ Option</b> is next to it, and <b>⇧ Shift</b> is above. The F-keys on a MacBook need <kbd>fn</kbd> held down, so use the Window menu instead.</p>
+  <div class="keys">
+    <table>
+      <thead><tr><th>Tool or action</th><th>Mac keys</th></tr></thead>
+      <tbody>
+        <tr><td>Selection Tool</td><td><kbd>V</kbd></td></tr>
+        <tr><td>Ellipse Tool</td><td><kbd>L</kbd></td></tr>
+        <tr><td>Rectangle Tool</td><td><kbd>M</kbd></td></tr>
+        <tr><td>Type Tool</td><td><kbd>T</kbd></td></tr>
+        <tr><td>Rotate Tool</td><td><kbd>R</kbd></td></tr>
+        <tr><td>Set rotate centre (with Rotate Tool)</td><td><kbd>⌥ Option</kbd> + click</td></tr>
+        <tr><td>Select more than one shape</td><td><kbd>⇧ Shift</kbd> + click</td></tr>
+        <tr><td>Swap between fill and stroke box</td><td><kbd>X</kbd></td></tr>
+        <tr><td>Set fill or stroke to None</td><td><kbd>/</kbd></td></tr>
+        <tr><td>Repeat last transform</td><td><kbd>⌘ Cmd</kbd> + <kbd>D</kbd></td></tr>
+        <tr><td>Create Outlines</td><td><kbd>⇧ Shift</kbd> + <kbd>⌘ Cmd</kbd> + <kbd>O</kbd></td></tr>
+        <tr><td>Undo</td><td><kbd>⌘ Cmd</kbd> + <kbd>Z</kbd></td></tr>
+        <tr><td>Save</td><td><kbd>⌘ Cmd</kbd> + <kbd>S</kbd></td></tr>
+        <tr><td>Zoom in / out</td><td><kbd>⌘ Cmd</kbd> + <kbd>+</kbd> / <kbd>⌘ Cmd</kbd> + <kbd>−</kbd></td></tr>
+        <tr><td>Fit artboard in window</td><td><kbd>⌘ Cmd</kbd> + <kbd>0</kbd></td></tr>
+        <tr><td>Take a screenshot for your folio</td><td><kbd>⇧ Shift</kbd> + <kbd>⌘ Cmd</kbd> + <kbd>4</kbd>, then drag</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<footer>Tool icons and panels are drawn replicas of the Illustrator interface, simplified for clarity. Your version of Illustrator may look slightly different.</footer>
+</div>
+
+<script>
+(function(){
+  // All drawing units are millimetres. Red lines are drawn thicker on screen than 0.1 pt so students can see them.
+  const RED = '#ff0000', CUT_W = 0.9;
+  const cx = 150, cy = 130, R = 100;
+  function markers(){
+    let s = '';
+    for (let i = 0; i < 12; i++) s += `<rect x="${cx-1.5}" y="${cy-R+8}" width="3" height="12" fill="#000" transform="rotate(${i*30} ${cx} ${cy})"/>`;
+    return s;
+  }
+  // Face + base united, optional slot (3 x 25) up from bottom centre
+  function faceOutline(slot){
+    // Circle meets the 120 mm base at x=90/210, y=210
+    const bottom = slot
+      ? `L210 250 L${cx+1.5} 250 L${cx+1.5} 225 L${cx-1.5} 225 L${cx-1.5} 250 L90 250 Z`
+      : `L210 250 L90 250 Z`;
+    return `<path d="M90 210 A${R} ${R} 0 1 1 210 210 ${bottom}" fill="none" stroke="${RED}" stroke-width="${CUT_W}"/>`;
+  }
+  const hole = `<circle cx="${cx}" cy="${cy}" r="4" fill="none" stroke="${RED}" stroke-width="${CUT_W}"/>`;
+  const stand = (ox) => `<path d="M${ox} 140 L${ox+58.5} 140 L${ox+58.5} 165 L${ox+61.5} 165 L${ox+61.5} 140 L${ox+120} 140 L${ox+120} 190 L${ox} 190 Z" fill="none" stroke="${RED}" stroke-width="${CUT_W}"/>`;
+  const svg = (vb, inner, label) => `<svg class="art" viewBox="${vb}" role="img" aria-label="${label}">${inner}</svg>`;
+  const set = (id, html) => { const el = document.getElementById(id); if (el) el.innerHTML = html; };
+
+  // Four 300 x 300 boards, one per material, in the class template layout
+  function boards(){
+    const T = (x,y,t) => `<text x="${x+14}" y="${y+24}" font-family="Archivo,Arial,sans-serif" font-weight="800" font-size="15" fill="#000">${t}</text>`;
+    const B = (x,y) => `<rect x="${x}" y="${y}" width="300" height="300" fill="#fff" stroke="#000" stroke-width="1.2"/>`;
+    const redMarkers = () => { let s=''; for (let i=0;i<12;i++) s += `<rect x="${cx-1.5}" y="${cy-R+8}" width="3" height="12" fill="none" stroke="${RED}" stroke-width="${CUT_W}" transform="rotate(${i*30} ${cx} ${cy})"/>`; return s; };
+    // front trim for the base: stepped Art-Deco-style plate, 120 wide
+    const trim = `<path d="M0 50 L0 20 L20 20 L20 10 L40 10 L40 0 L80 0 L80 10 L100 10 L100 20 L120 20 L120 50 Z" fill="none" stroke="${RED}" stroke-width="${CUT_W}"/>`;
+    let s = '';
+    // Wood DESIGN (top right in template; top left here reads first)
+    s += B(0,0) + T(0,0,'Wood DESIGN (Your NAME)') + `<g transform="translate(0 40)">` + faceOutline(true) + hole + markers() + `</g>`;
+    s += B(340,0) + T(340,0,'White Acrylic (Your NAME)') + `<g transform="translate(430 140) scale(1.0)">` + `<g transform="translate(0 -140)">` + stand(0) + `</g></g>`;
+    s += B(0,340) + T(0,340,'Yellow Acrylic (Your NAME)') + `<g transform="translate(90 470)">` + trim + `</g>`;
+    s += B(340,340) + T(340,340,'Blue Acrylic (Your NAME)') + `<g transform="translate(340 370)">` + redMarkers() + `</g>`;
+    return s;
+  }
+  set('hero', svg('-4 -4 648 648', boards(),
+    'Final file: four 300 by 300 mm boards titled Wood DESIGN, White Acrylic, Yellow Acrylic and Blue Acrylic, each holding that material’s parts'));
+  set('s8', svg('-4 -4 648 648', boards(),
+    'Four boards, one per material'));
+
+  set('s3', svg('40 20 220 220',
+    `<circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="${RED}" stroke-width="${CUT_W}"/>` + hole +
+    `<path d="M${cx} ${cy-14} V${cy-6} M${cx} ${cy+6} V${cy+14} M${cx-14} ${cy} H${cx-6} M${cx+6} ${cy} H${cx+14}" stroke="#2d8ceb" stroke-width=".6"/>` +
+    `<text x="${cx+8}" y="${cy-8}" font-family="IBM Plex Mono,monospace" font-size="7" fill="#2d8ceb">8 mm</text>` +
+    `<text x="${cx}" y="${cy+R-8}" font-family="IBM Plex Mono,monospace" font-size="7" text-anchor="middle" fill="#666">Ø 200 mm</text>`,
+    'Clock face circle with centre hole aligned'));
+
+  set('s4', svg('40 20 220 220',
+    `<circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="${RED}" stroke-width="${CUT_W}"/>` + hole + markers() +
+    `<path d="M${cx} ${cy} L${cx} ${cy-R+8}" stroke="#2d8ceb" stroke-width=".5" stroke-dasharray="2 2"/>` +
+    `<path d="M${cx} ${cy-30} A30 30 0 0 1 ${cx+15} ${cy-25.98}" fill="none" stroke="#2d8ceb" stroke-width=".7"/>` +
+    `<text x="${cx+6}" y="${cy-34}" font-family="IBM Plex Mono,monospace" font-size="7" fill="#2d8ceb">30°</text>`,
+    'Twelve markers rotated 30 degrees around the centre'));
+
+  set('s6', svg('40 0 470 270',
+    `<g>` +
+      `<circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="${RED}" stroke-width="${CUT_W}"/>` +
+      `<rect x="90" y="200" width="120" height="50" fill="none" stroke="${RED}" stroke-width="${CUT_W}"/>` +
+      `<text x="${cx}" y="22" font-family="IBM Plex Mono,monospace" font-size="11" text-anchor="middle" fill="#666">BEFORE</text>` +
+    `</g>` +
+    `<text x="260" y="145" font-family="IBM Plex Mono,monospace" font-size="18" text-anchor="middle" fill="#2d8ceb">→</text>` +
+    `<g transform="translate(220 0)">` + faceOutline(false) +
+      `<text x="${cx}" y="22" font-family="IBM Plex Mono,monospace" font-size="11" text-anchor="middle" fill="#666">AFTER UNITE</text>` +
+    `</g>`,
+    'Before: overlapping circle and rectangle. After: one united outline'));
+
+  set('s7', svg('40 110 380 150',
+    `<g>` + faceOutline(true).replace('M90 210','M90 210') + `</g>` +
+    `<rect x="${cx-12}" y="220" width="24" height="34" fill="none" stroke="#2d8ceb" stroke-width=".6"/>` +
+    `<text x="${cx}" y="208" font-family="IBM Plex Mono,monospace" font-size="7" text-anchor="middle" fill="#2d8ceb">3 × 25 slot</text>` +
+    stand(285) +
+    `<rect x="${285+48}" y="136" width="24" height="34" fill="none" stroke="#2d8ceb" stroke-width=".6"/>` +
+    `<text x="345" y="202" font-family="IBM Plex Mono,monospace" font-size="7" text-anchor="middle" fill="#666">stand 120 × 50</text>`,
+    'Bottom of the face with a slot cut upward, beside the stand with a slot cut downward'));
+})();
+</script>
+
+</body>
+</html>
